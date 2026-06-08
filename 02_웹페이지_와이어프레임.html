@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹 접근성 가이드 — 와이어프레임</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --line:#c9c9c9; --line-strong:#888;
+    --fill:#ededed; --fill-2:#f6f6f6; --accent:#2d6cdf; --muted:#777;
+    --radius:6px; --gap:20px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+    color:var(--ink); background:#fff; line-height:1.6; font-size:15px;
+  }
+  /* 와이어프레임 박스 표기 — 실제 콘텐츠가 아닌 '자리'임을 보여주는 스타일 */
+  .ph{ background:var(--fill); border:1px dashed var(--line-strong); border-radius:var(--radius);
+       color:var(--muted); display:flex; align-items:center; justify-content:center; text-align:center; }
+  .tag{ position:absolute; top:6px; left:8px; font-size:10px; letter-spacing:.05em;
+        color:var(--muted); text-transform:uppercase; background:#fff; padding:0 4px; }
+
+  /* ===== GNB ===== */
+  header.gnb{
+    border-bottom:2px solid var(--ink); padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:#fff; z-index:10;
+  }
+  .logo{ font-weight:800; font-size:18px; border:2px solid var(--ink); padding:4px 12px; border-radius:var(--radius); }
+  nav.gnb-links{ display:flex; gap:6px; flex-wrap:wrap; }
+  nav.gnb-links button{
+    font:inherit; font-size:13px; border:1px solid var(--line); background:var(--fill-2);
+    padding:6px 12px; border-radius:var(--radius); cursor:pointer; color:var(--ink);
+  }
+  nav.gnb-links button.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .cta-pill{ background:var(--accent); color:#fff; border-color:var(--accent)!important; font-weight:700; }
+
+  /* ===== LAYOUT 3-col ===== */
+  .layout{ display:grid; grid-template-columns:230px minmax(0,1fr) 200px; gap:var(--gap);
+           max-width:1280px; margin:0 auto; padding:24px 28px 60px; }
+  aside{ position:relative; }
+  .sticky{ position:sticky; top:90px; }
+
+  /* 좌측 — 가이드 전체 목차 */
+  .toc-box{ border:1px solid var(--line); border-radius:var(--radius); padding:14px; position:relative; }
+  .toc-box h4{ margin:0 0 10px; font-size:12px; letter-spacing:.05em; color:var(--muted); text-transform:uppercase; }
+  .toc-box ol{ margin:0; padding-left:0; list-style:none; counter-reset:c; }
+  .toc-box li{ counter-increment:c; margin-bottom:4px; }
+  .toc-box li button{
+    width:100%; text-align:left; font:inherit; font-size:13px; cursor:pointer;
+    border:none; background:none; padding:7px 8px; border-radius:var(--radius); color:var(--ink);
+    display:flex; gap:8px; align-items:baseline;
+  }
+  .toc-box li button::before{ content:counter(c); font-weight:700; color:var(--muted); min-width:14px; }
+  .toc-box li button:hover{ background:var(--fill-2); }
+  .toc-box li button.active{ background:var(--accent); color:#fff; }
+  .toc-box li button.active::before{ color:#fff; }
+
+  /* 우측 — on-page anchor */
+  .anchor-box{ border-left:2px solid var(--line); padding:4px 0 4px 14px; position:relative; }
+  .anchor-box h4{ margin:0 0 10px; font-size:12px; letter-spacing:.05em; color:var(--muted); text-transform:uppercase; }
+  .anchor-box a{ display:block; font-size:12.5px; color:var(--muted); text-decoration:none; padding:4px 0; }
+  .anchor-box a:hover{ color:var(--accent); }
+  .dl-side{ margin-top:18px; }
+  .dl-side .ph{ height:120px; flex-direction:column; gap:6px; font-size:12px; border-color:var(--accent); color:var(--accent); background:#eef3fd; }
+
+  /* ===== MAIN ===== */
+  main{ min-width:0; position:relative; }
+  .breadcrumb{ font-size:12px; color:var(--muted); margin-bottom:10px; }
+  .breadcrumb span{ color:var(--accent); }
+  h1.page-title{ font-size:26px; line-height:1.3; margin:0 0 8px; }
+  .lead{ color:#444; background:var(--fill-2); border-left:3px solid var(--line-strong);
+         padding:12px 16px; border-radius:0 var(--radius) var(--radius) 0; margin:0 0 28px; font-size:14.5px; }
+  h2.sec{ font-size:19px; margin:32px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  .text-lines .ph{ height:13px; margin-bottom:9px; }
+  .text-lines .ph:nth-child(3n){ width:82%; }
+  .text-lines .ph:nth-child(4n){ width:90%; }
+  .tbl-ph{ height:160px; }
+  .list-ph{ height:96px; }
+  .img-ph{ height:180px; }
+
+  .faq .ph{ height:46px; margin-bottom:8px; justify-content:flex-start; padding-left:16px; }
+  .pager{ display:flex; justify-content:space-between; gap:12px; margin-top:40px; }
+  .pager button{ flex:1; font:inherit; font-size:13px; border:1px solid var(--line); background:var(--fill-2);
+    padding:14px; border-radius:var(--radius); cursor:pointer; text-align:left; color:var(--ink); }
+  .pager button:hover{ border-color:var(--ink); }
+  .pager button:disabled{ opacity:.35; cursor:default; }
+  .pager .dir{ display:block; font-size:11px; color:var(--muted); margin-bottom:3px; }
+
+  /* CTA 본문 내 */
+  .cta-block{ margin-top:40px; border:2px solid var(--accent); border-radius:var(--radius);
+    padding:22px; background:#eef3fd; text-align:center; position:relative; }
+  .cta-block h3{ margin:0 0 6px; font-size:17px; }
+  .cta-block p{ margin:0 0 14px; font-size:13px; color:#444; }
+  .cta-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .cta-row .inp{ border:1px solid var(--line-strong); background:#fff; border-radius:var(--radius);
+    padding:10px 14px; font-size:13px; color:var(--muted); min-width:200px; text-align:left; }
+  .cta-row .btn{ background:var(--accent); color:#fff; border:none; border-radius:var(--radius);
+    padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; }
+
+  /* ===== HUB ===== */
+  .hub{ max-width:1100px; margin:0 auto; padding:0 28px 60px; }
+  .hero{ border:1px solid var(--line); border-radius:var(--radius); padding:40px; text-align:center;
+    margin:28px 0; background:var(--fill-2); position:relative; }
+  .hero h1{ font-size:30px; margin:0 0 10px; }
+  .hero p{ color:var(--muted); margin:0 auto; max-width:560px; }
+  .card-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card{ border:1px solid var(--line); border-radius:var(--radius); padding:20px; cursor:pointer;
+    background:#fff; transition:.15s; position:relative; }
+  .card:hover{ border-color:var(--ink); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.06); }
+  .card .num{ font-size:12px; font-weight:800; color:var(--accent); }
+  .card h3{ margin:6px 0 8px; font-size:16px; }
+  .card .desc{ font-size:13px; color:var(--muted); }
+  .hub-cta{ margin-top:28px; }
+
+  footer.site{ border-top:2px solid var(--ink); padding:28px; text-align:center; font-size:12px; color:var(--muted); }
+  .note{ max-width:1280px; margin:0 auto; padding:14px 28px; font-size:12px; color:var(--muted);
+    background:#fffbe6; border-bottom:1px solid #f0e3a0; }
+  .url-bar{ font-family:monospace; font-size:12px; color:var(--muted); background:var(--fill-2);
+    border:1px solid var(--line); border-radius:var(--radius); padding:6px 12px; display:inline-block; margin-bottom:14px; }
+  .url-bar b{ color:var(--accent); }
+  @media(max-width:980px){
+    .layout{ grid-template-columns:1fr; }
+    aside.left, aside.right{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="note">
+  📐 <b>저충실도 와이어프레임</b> — 회색 점선 박스는 실제 텍스트·이미지·표가 들어갈 <b>자리</b>를 의미합니다. 디자인이 아닌 <b>구조와 흐름</b>을 보기 위한 문서입니다. 상단 네비게이션과 좌측 목차, 카드를 클릭하면 페이지가 전환됩니다.
+</div>
+
+<header class="gnb">
+  <div class="logo" onclick="go('hub')" style="cursor:pointer">A11Y GUIDE</div>
+  <nav class="gnb-links" id="gnbLinks"></nav>
+</header>
+
+<!-- HUB -->
+<section id="view-hub" class="hub" style="display:none">
+  <div style="text-align:center;margin-top:20px"><span class="url-bar">website.com/<b>guide</b></span></div>
+  <div class="hero">
+    <div class="tag" style="position:static;display:inline-block;margin-bottom:8px">HERO</div>
+    <h1>웹 접근성 완벽 가이드</h1>
+    <p>법적 의무부터 대체텍스트 작성, AI 자동화의 한계, 산업별 적용, WA 인증까지 — 실무에 필요한 모든 것을 6개 챕터로 정리했습니다.</p>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+  <div class="cta-block hub-cta">
+    <div class="tag">CTA</div>
+    <h3>전체 가이드를 PDF 한 권으로</h3>
+    <p>6개 챕터 + 업종별 체크리스트를 약 50쪽 PDF로 받아보세요.</p>
+    <div class="cta-row">
+      <div class="inp">이메일 주소 입력</div>
+      <button class="btn">무료 다운로드</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT PAGE TEMPLATE -->
+<section id="view-content" class="layout" style="display:none">
+  <aside class="left">
+    <div class="sticky">
+      <div class="toc-box">
+        <div class="tag">좌측 사이드바</div>
+        <h4>가이드 목차</h4>
+        <ol id="leftToc"></ol>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="url-bar" id="urlBar"></div>
+    <div class="breadcrumb">가이드 &rsaquo; <span id="crumb"></span></div>
+    <h1 class="page-title" id="cTitle"></h1>
+    <div class="lead" id="cLead"></div>
+
+    <div id="cBody"></div>
+
+    <h2 class="sec">자주 묻는 질문</h2>
+    <div class="faq">
+      <div class="ph">Q1. 질문 자리</div>
+      <div class="ph">Q2. 질문 자리</div>
+      <div class="ph">Q3. 질문 자리</div>
+    </div>
+
+    <div class="cta-block">
+      <div class="tag">CTA (전 페이지 공통)</div>
+      <h3>웹 접근성 체크리스트 PDF 무료 다운로드</h3>
+      <p>전체 6개 챕터를 한 권으로 정리한 가이드북을 받아보세요.</p>
+      <div class="cta-row">
+        <div class="inp">이메일 주소 입력</div>
+        <button class="btn">무료 다운로드</button>
+      </div>
+    </div>
+
+    <div class="pager">
+      <button id="prevBtn"><span class="dir">← 이전 글</span><span id="prevTxt"></span></button>
+      <button id="nextBtn" style="text-align:right"><span class="dir">다음 글 →</span><span id="nextTxt"></span></button>
+    </div>
+  </main>
+
+  <aside class="right">
+    <div class="sticky">
+      <div class="anchor-box">
+        <div class="tag" style="left:14px">우측 사이드바</div>
+        <h4>이 페이지 목차</h4>
+        <div id="anchorList"></div>
+      </div>
+      <div class="dl-side">
+        <div class="ph"><b>📄 PDF</b><span>체크리스트<br>다운로드</span></div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<footer class="site">
+  웹 접근성 완벽 가이드 · 와이어프레임 · 푸터(회사 정보 / PDF 다운로드 / 저작권 자리)
+</footer>
+
+<script>
+const PAGES = [
+  { slug:'1-intro',    title:'웹 접근성이란 무엇인가', short:'웹 접근성이란',
+    lead:'웹 접근성이 무엇이고 왜 모든 사용자에게 필요한 기본 조건인지, 어떤 법과 인증이 이를 뒷받침하는지 정리합니다.',
+    body:['웹 접근성이란','커브컷 효과','핵심 요소 4가지','관련 법과 인증'],
+    bodyTypes:['text','text','table','text'] },
+  { slug:'2-law',      title:'장차법 웹 접근성 의무 대상', short:'장차법 의무 대상',
+    lead:'어떤 조직이 의무 대상이며 언제부터 적용되어 왔는지, 의무가 어떤 절차로 작동하는지 정리합니다.',
+    body:['13개 유형과 5가지 묶음','단계적 적용 일정','장차법 작동 방식','자가진단 체크리스트'],
+    bodyTypes:['table','table','list','list'] },
+  { slug:'3-alt-text', title:'대체텍스트 작성 7원칙', short:'대체텍스트 7원칙',
+    lead:'WCAG 기준을 충족하면서 실무에서 바로 적용할 수 있는 7가지 원칙을 업종별 예시와 함께 정리합니다.',
+    body:['대체텍스트란','작성 7원칙','업종별 좋은 예/나쁜 예','AI 자동 생성 주의점'],
+    bodyTypes:['text','list','table','table'] },
+  { slug:'4-ai',       title:'AI 대체텍스트, 어디까지 믿을 수 있나', short:'AI 대체텍스트',
+    lead:'AI가 잘하는 영역과 자주 틀리는 사례, 법적 리스크, 그리고 하이브리드 검수 전략을 정리합니다.',
+    body:['AI가 잘하는 것 vs 못하는 것','자주 발생하는 오류 3가지','법적·품질 리스크','하이브리드 전략'],
+    bodyTypes:['table','list','text','list'] },
+  { slug:'5-industry', title:'산업별 적용 가이드', short:'산업별 가이드',
+    lead:'쇼핑몰·공공기관·금융 세 업종이 마주하는 고유한 과제와 지금 확인할 체크리스트를 정리합니다.',
+    body:['쇼핑몰·이커머스','공공기관','금융','업종별 우선순위'],
+    bodyTypes:['list','list','list','table'] },
+  { slug:'6-wa-cert',  title:'WA 인증 취득 전 과정', short:'WA 인증 과정',
+    lead:'인증기관 선택 기준, 단계별 절차·소요 기간·비용, 신청 전 점검 체크리스트를 정리합니다.',
+    body:['WA 인증이란','인증기관 3곳 비교','단계별 절차·비용','준비 체크리스트'],
+    bodyTypes:['table','table','table','list'] },
+];
+
+function buildGnb(){
+  const el = document.getElementById('gnbLinks'); el.innerHTML='';
+  const hub = document.createElement('button'); hub.textContent='가이드 홈'; hub.onclick=()=>go('hub');
+  hub.id='gnb-hub'; el.appendChild(hub);
+  PAGES.forEach((p,i)=>{
+    const b=document.createElement('button'); b.textContent=(i+1); b.title=p.title;
+    b.id='gnb-'+i; b.onclick=()=>go(i); el.appendChild(b);
+  });
+  const dl=document.createElement('button'); dl.textContent='PDF 다운로드'; dl.className='cta-pill'; el.appendChild(dl);
+}
+
+function buildHub(){
+  const g=document.getElementById('cardGrid'); g.innerHTML='';
+  PAGES.forEach((p,i)=>{
+    const c=document.createElement('div'); c.className='card'; c.onclick=()=>go(i);
+    c.innerHTML=`<div class="num">CHAPTER ${i+1}</div><h3>${p.title}</h3>
+      <div class="desc">${p.lead}</div>
+      <div class="url-bar" style="margin:12px 0 0">/guide/<b>${p.slug}</b></div>`;
+    g.appendChild(c);
+  });
+}
+
+function renderBody(p){
+  const wrap=document.getElementById('cBody'); wrap.innerHTML='';
+  p.body.forEach((sec,i)=>{
+    const h=document.createElement('h2'); h.className='sec'; h.textContent=sec; h.id='sec'+i;
+    wrap.appendChild(h);
+    const t=p.bodyTypes[i];
+    if(t==='table'){
+      const d=document.createElement('div'); d.className='ph tbl-ph'; d.style.position='relative';
+      d.innerHTML='<span class="tag">표</span>비교/정리 표 자리'; wrap.appendChild(d);
+    } else if(t==='list'){
+      const d=document.createElement('div'); d.className='ph list-ph'; d.style.position='relative';
+      d.innerHTML='<span class="tag">리스트</span>번호/불릿 목록 자리'; wrap.appendChild(d);
+    } else {
+      const box=document.createElement('div'); box.className='text-lines';
+      for(let k=0;k<4;k++){ const l=document.createElement('div'); l.className='ph'; box.appendChild(l); }
+      wrap.appendChild(box);
+    }
+  });
+}
+
+function buildAnchors(p){
+  const a=document.getElementById('anchorList'); a.innerHTML='';
+  p.body.forEach((sec,i)=>{
+    const link=document.createElement('a'); link.href='#sec'+i; link.textContent=sec; a.appendChild(link);
+  });
+  const faq=document.createElement('a'); faq.href='#'; faq.textContent='자주 묻는 질문'; a.appendChild(faq);
+}
+
+function buildLeftToc(active){
+  const ol=document.getElementById('leftToc'); ol.innerHTML='';
+  PAGES.forEach((p,i)=>{
+    const li=document.createElement('li');
+    const b=document.createElement('button'); b.textContent=p.short;
+    if(i===active) b.className='active'; b.onclick=()=>go(i);
+    li.appendChild(b); ol.appendChild(li);
+  });
+}
+
+function go(target){
+  document.querySelectorAll('.gnb-links button').forEach(b=>b.classList.remove('active'));
+  if(target==='hub'){
+    document.getElementById('view-hub').style.display='block';
+    document.getElementById('view-content').style.display='none';
+    document.getElementById('gnb-hub').classList.add('active');
+    window.scrollTo(0,0); return;
+  }
+  const i=target, p=PAGES[i];
+  document.getElementById('view-hub').style.display='none';
+  document.getElementById('view-content').style.display='grid';
+  const gb=document.getElementById('gnb-'+i); if(gb) gb.classList.add('active');
+
+  document.getElementById('urlBar').innerHTML='website.com/guide/<b>'+p.slug+'</b>';
+  document.getElementById('crumb').textContent=p.title;
+  document.getElementById('cTitle').textContent=p.title;
+  document.getElementById('cLead').textContent=p.lead;
+  renderBody(p); buildAnchors(p); buildLeftToc(i);
+
+  const prev=document.getElementById('prevBtn'), next=document.getElementById('nextBtn');
+  if(i>0){ prev.disabled=false; document.getElementById('prevTxt').textContent=PAGES[i-1].short; prev.onclick=()=>go(i-1); }
+  else { prev.disabled=true; document.getElementById('prevTxt').textContent='—'; }
+  if(i<PAGES.length-1){ next.disabled=false; document.getElementById('nextTxt').textContent=PAGES[i+1].short; next.onclick=()=>go(i+1); }
+  else { next.disabled=true; document.getElementById('nextTxt').textContent='—'; }
+  window.scrollTo(0,0);
+}
+
+buildGnb(); buildHub(); go('hub');
+</script>
+</body>
+</html>
