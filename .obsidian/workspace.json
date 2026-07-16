@@ -11,14 +11,14 @@
             "id": "a28ee7e2caf475ac",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "02_웹페이지_와이어프레임.html",
-                "bFile": "02_웹페이지_와이어프레임.html",
-                "aRef": ""
+                "file": "Team/suminkang88/3. CLI.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: 02_웹페이지_와이어프레임.html  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "3. CLI"
             }
           }
         ]
@@ -202,8 +202,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a28ee7e2caf475ac",
+  "active": "ab28938f95034757",
   "lastOpenFiles": [
+    "Team/suminkang88/3. CLI.md",
+    "0. 개요.md",
+    "Team/suminkang88/2. Data & Data Analyst.md",
+    "Team/suminkang88/1. Git & Github.md",
     "접근성 가이드북/01_웹접근성이란.md",
     "접근성 가이드북/웹_PDF_변환규칙.md",
     "접근성 가이드북/스타일_가이드.md",
@@ -212,8 +216,6 @@
     "접근성 가이드북/03_대체텍스트7원칙.md",
     "접근성 가이드북/02_장차법의무대상.md",
     "Team/suminkang88/0. Obsidian.md",
-    "Team/suminkang88/2. Data & Data Analyst.md",
-    "Team/suminkang88/1. Git & Github.md",
     "README.md",
     "무제.base",
     "환영합니다!.md",
